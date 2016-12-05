@@ -36,9 +36,39 @@ function QRSDetect(filename, M, WS)
   plot(yPlot);
   
   %Decision making.
+  thresholdCompute = @(alfa, gamma, peak, threshold) alfa * gamma * peak + (1 - alfa) * threshold;
   alfa = 0.05;
   gamma = 0.15;
+  window = 200;
+  
   %Find first peak.
+  peak = max(y(1:window));
+  threshold = peak;
+  threshold = thresholdCompute(alfa, gamma, peak, threshold)
+  
+  startPeak = false;
+  c = 1;
+  for i = 1 : size(x,2)
+    if (y(i) > threshold)
+      if (!startPeak)
+        startPeak = true;
+        curMax = y(i);
+        curIndex = i;
+      end
+      if (y(i) > curMax)
+        curMax = y(i);
+        curIndex = i;
+      end
+    end
+    if (startPeak)
+      startPeak = false;
+      indices(c) = curIndex;
+      c++;
+      threshold = thresholdCompute(alfa, gamma, curMax, threshold);
+    else
+  end
+  
+  %Plotting after decision making.
+  y
  
-
 end
