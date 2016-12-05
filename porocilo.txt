@@ -1,0 +1,12 @@
+OBSS: 1. assignment
+
+Vprašanja:
+-> Kaj je M?
+-> Napačno zaznavanje pri 1. valu
+-> Odločanje
+
+A Moving Average based Filtering System with its Application to Real-time QRS Detection
+
+1. High-pass filter
+2. Low-pass filter
+3. Decision making

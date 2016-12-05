@@ -1,6 +1,6 @@
 %Call: Detector('100', 5, 30)
 function Detector(record)
-  fileName = sprintf('%sm.mat', record);
+  fileName = sprintf('input/%sm.mat', record);
   t = cputime();
   
   M = 5;    % filter length
