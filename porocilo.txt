@@ -5,6 +5,8 @@ Vprašanja:
 -> Napačno zaznavanje pri 1. valu
 -> Odločanje
 
+To fully complete the assignment you have to satisfy following requirements: The QRS detector has to accept the name of the record (.dat and .hea files of the database) as a parameter. The program has to open this record and detect the QRS complexes in the record. The program has to write an annotation file (.det) in the ASCII format, which contains sample indexes of the fiducial points (FPs) of the detected QRS complexes. The performance of the program has to be evaluated in the sense of sensitivity (Se) and positive predictivity (+P) with regard to manually annotated fiducial points (FPs) of the QRS complexes (.atr files of the database). The results of the performance evaluation together with your discussions and conclusions have to be written into another text (.txt) file. Discuss also the weaknesses of the implemented technique and possible improvements. The .det and .txt files, together with source of your program (included in a single compressed .zip archive) have to be submitted during uploading the assignment.
+
 A Moving Average based Filtering System with its Application to Real-time QRS Detection
 
 1. High-pass filter
