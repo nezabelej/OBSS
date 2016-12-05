@@ -1,4 +1,4 @@
-function QRSDetect(filename, M, WS)
+function indices = QRSDetect(filename, M, WS)
 
   signal = load(filename);
   x = signal.val(1,:);
@@ -44,7 +44,7 @@ function QRSDetect(filename, M, WS)
   %Find first peak.
   peak = max(y(1:window));
   threshold = peak;
-  threshold = thresholdCompute(alfa, gamma, peak, threshold)
+  threshold = thresholdCompute(alfa, gamma, peak, threshold);
   
   startPeak = false;
   c = 1;
@@ -59,16 +59,16 @@ function QRSDetect(filename, M, WS)
         curMax = y(i);
         curIndex = i;
       end
-    end
-    if (startPeak)
-      startPeak = false;
-      indices(c) = curIndex;
-      c++;
-      threshold = thresholdCompute(alfa, gamma, curMax, threshold);
     else
+      if (startPeak)
+        startPeak = false;
+        indices(c) = curIndex;
+        c++;
+        threshold = thresholdCompute(alfa, gamma, curMax, threshold);
+      end
+    end
   end
   
-  %Plotting after decision making.
-  y
+  indices
  
 end
