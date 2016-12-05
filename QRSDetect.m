@@ -37,7 +37,7 @@ function indices = QRSDetect(filename, M, WS)
   
   %Decision making.
   thresholdCompute = @(alfa, gamma, peak, threshold) alfa * gamma * peak + (1 - alfa) * threshold;
-  alfa = 0.05;
+  alfa = 0.1;
   gamma = 0.15;
   window = 200;
   
