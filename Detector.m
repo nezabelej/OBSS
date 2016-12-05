@@ -5,7 +5,7 @@ function Detector(record)
   
   M = 5;    % filter length
   WS = 30;  % sliding window size
-  idx = QRSDetect(fileName, M, WS);
+  idx = QRSDetect(fileName, M, WS)
   
   fprintf('Running time: %f\n', cputime() - t);
   asciName = sprintf('%s.asc',record);

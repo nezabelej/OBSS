@@ -5,7 +5,7 @@ function indices = QRSDetect(filename, M, WS)
 
   %Initial plotting.
   figure(1);
-  xPlot = x(1:(size(x,2)/512));
+  xPlot = x(1:(size(x,2)/300));
   plot(xPlot);
 
   %1. High-pass filter
@@ -22,7 +22,7 @@ function indices = QRSDetect(filename, M, WS)
 
   %Plotting after HPS. 
   figure(2);
-  yPlot = y(1:(size(y,2)/512));
+  yPlot = y(1:(size(y,2)/300));
   plot(yPlot);
 
   %2. Low-pass filter
@@ -32,7 +32,7 @@ function indices = QRSDetect(filename, M, WS)
 
   %Plotting after LPS.
   figure(3);
-  yPlot = y(1:(size(y,2)/512));
+  yPlot = y(1:(size(y,2)/300));
   plot(yPlot);
   
   %Decision making.
@@ -69,6 +69,6 @@ function indices = QRSDetect(filename, M, WS)
     end
   end
   
-  indices
- 
-end
+  indices = indices + WS/2;
+  
+ end
