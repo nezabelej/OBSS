@@ -23,7 +23,20 @@ We find the first peak in the graph. With this one, we compute the first thresho
 
 5. Outputing the .det file with QRS detections.
 
-Weaknesses:
+-----------RESULTS-------------
+
+--------- time ------ Sensitivity -------- +P ---
+100      37.812           100%            100%
+101      38.750           100%            98.96%
+102      38.532           99.95%          87.54%
+103      39.282           100%            99.94%
+104      38.343           98.82%          96.07%
+105      38.500           99.3%           82.85%
+106      39.406           99.47%          96.62%
+107      39.703           99.89%          90.09%
+108      39.703           88.78%          37.3%
+109      38.563           99.57%          96.4%
+
 ------------------------------------------------------------------
 HOW TO:
 1. Convert .dat to .mat: wfdb2mat -r 100
