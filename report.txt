@@ -27,9 +27,13 @@ Positive predictivity = TP / (TP + FP) ...The proportion of detections which act
 
 
 -----------PARAMETERS----------
+M: 5
+windowSize (LPF): 10
+alpha: 0.05
+gamma: 0.15
+windowSize (decision making): 180
 
-
------------RESULTS-------------
+-----------RESULTS-------------         POSODOBI!!!!!!
 
 --------- time ------ Sensitivity -------- +P ---
 100      37.812           100%            100%
