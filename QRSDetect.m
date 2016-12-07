@@ -25,50 +25,34 @@ function indices = QRSDetect(filename, M, WS)
   yPlot = y(1:(size(y,2)/300));
   plot(yPlot);
 
-  %2. Low-pass filter
+ %2. Low-pass filter
   for i = 1 : (size(x,2) - WS - 1)
     y(i) = sum(y(i : i + WS).^2);
   end 
 
+  y = [zeros(1,(WS+1)/2) y(1:numel(y-3))];
+    
   %Plotting after LPS.
   figure(3);
   yPlot = y(1:(size(y,2)/300));
   plot(yPlot);
   
   %Decision making.
-  thresholdCompute = @(alfa, gamma, peak, threshold) alfa * gamma * peak + (1 - alfa) * threshold;
-  alfa = 0.05;
+  thresholdCompute = @(alpha, gamma, peak, threshold) alpha * gamma * peak + (1 - alpha) * threshold;
+  alpha = 0.05;
   gamma = 0.15;
   window = 200;
   
-  %Find first peak.
-  peak = max(y(1:window));
-  threshold = peak;
-  threshold = thresholdCompute(alfa, gamma, peak, threshold);
-  
-  startPeak = false;
-  c = 1;
-  for i = 1 : size(x,2)
-    if (y(i) > threshold)
-      if (!startPeak)
-        startPeak = true;
-        curMax = y(i);
-        curIndex = i;
-      end
-      if (y(i) > curMax)
-        curMax = y(i);
-        curIndex = i;
-      end
-    else
-      if (startPeak)
-        startPeak = false;
-        indices(c) = curIndex;
-        c++;
-        threshold = thresholdCompute(alfa, gamma, curMax, threshold);
-      end
-    end
+  threshold = max(y(1:window));
+    
+  for i = 1:window:length(y)-window
+     [max_v,max_i] = max(y(i:i+window));
+     if max_v >= threshold
+         y(max_i+i) = 1;
+         threshold = thresholdCompute(alpha, gamma, max_v, threshold);
+     end
   end
   
-  indices = indices + WS/2;
+  indices = find(y==1);
   
  end
