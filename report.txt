@@ -1,7 +1,7 @@
 OBSS: 1. assignment (A Moving Average based Filtering System with its Application to Real-time QRS Detection)
 
 Vprašanja:
--> Kaj je M?
+-> Kaj je M? Se, P+
 -> Napačno zaznavanje pri 1. valu
 -> Odločanje
 
@@ -13,7 +13,7 @@ To fully complete the assignment you have to satisfy following requirements: The
 1. Our program accepts the name of the record (.dat and .hea files of the database) as a parameter. 
 
 2. High-pass filter
-HPF suppresses the low-frequency waves. We use the equations, used in the reference article.
+HPF suppresses the low-frequency waves and accentuates the QRS complex. We use the equations, used in the reference article.
 
 3. Low-pass filter
 LPF performs a non-linear amplification and full-wave rectification. We set the window size with which we slide through our graph and square and sum the points inside the current window. With squaring, we amplify the QRS wave, and also we suppress the noise (because 0.1^2 = 0.01). Squaring also takes care of losing the negative values.
@@ -22,6 +22,12 @@ LPF performs a non-linear amplification and full-wave rectification. We set the 
 We find the first peak in the graph. With this one, we compute the first threshold with the equation: threshold = alfa * gamma * peak + (1 - alpha) * threshold. Then we iterate through all the points and seek for the peaks (if peak > threshold). When finding them, we save them and update the threshold.
 
 5. Outputing the .det file with QRS detections.
+Sensitivity = TP / (TP + FN)  ...The proportion of events which were detected.
+Positive predictivity = TP / (TP + FP) ...The proportion of detections which actually were events.
+
+
+-----------PARAMETERS----------
+
 
 -----------RESULTS-------------
 
@@ -37,13 +43,18 @@ We find the first peak in the graph. With this one, we compute the first thresho
 108      39.703           88.78%          37.3%
 109      38.563           99.57%          96.4%
 
+-----------CONCLUSION------------
+
+The algorithm despite its simplicity brings very good results. Results also depend on the parameters' values.
+
+
 ------------------------------------------------------------------
 HOW TO:
 1. Convert .dat to .mat: wfdb2mat -r 100
 
 2. Convert .det to .qrs: wrann -r 100 -a qrs < 100.det
 
-3. Compare the results with referential results: bxb -r 100 -a atr det
+3. Compare the results with referential results: bxb -r 100 -a atr qrs
 
 Database source: 
 * https://physionet.org/physiobank/database/ltstdb/
