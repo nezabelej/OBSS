@@ -1,11 +1,12 @@
-%Call: Detector('100', 5, 30)
+%Call: Detector('100')
 function Detector(record)
   fileName = sprintf('input/%sm.mat', record);
   t = cputime();
   
   M = 5;    % filter length
-  WS = 30;  % sliding window size
-  idx = QRSDetect(fileName, M, WS);
+  WS = 10;  % sliding window size
+  WSDecision = 180; 
+  idx = QRSDetect(fileName, M, WS, WSDecision);
   
   fprintf('Running time: %f\n', cputime() - t);
   asciName = sprintf('det/%s.det', record);

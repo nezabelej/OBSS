@@ -1,65 +1,75 @@
+Author: Neža Belej (63120340)
 OBSS: 1. assignment (A Moving Average based Filtering System with its Application to Real-time QRS Detection)
 
-Vprašanja:
--> Kaj je M? Se, P+
--> Napačno zaznavanje pri 1. valu
--> Odločanje
 
 -----------INSTRUCTIONS----------
 To fully complete the assignment you have to satisfy following requirements: The QRS detector has to accept the name of the record (.dat and .hea files of the database) as a parameter. The program has to open this record and detect the QRS complexes in the record. The program has to write an annotation file (.det) in the ASCII format, which contains sample indexes of the fiducial points (FPs) of the detected QRS complexes. The performance of the program has to be evaluated in the sense of sensitivity (Se) and positive predictivity (+P) with regard to manually annotated fiducial points (FPs) of the QRS complexes (.atr files of the database). The results of the performance evaluation together with your discussions and conclusions have to be written into another text (.txt) file. Discuss also the weaknesses of the implemented technique and possible improvements. The .det and .txt files, together with source of your program (included in a single compressed .zip archive) have to be submitted during uploading the assignment.
 
 -----------SOLUTION-------------
 
-1. Our program accepts the name of the record (.dat and .hea files of the database) as a parameter. 
+1. Our program accepts the name of the record (.mat files) as a parameter. 
 
 2. High-pass filter
 HPF suppresses the low-frequency waves and accentuates the QRS complex. We use the equations, used in the reference article.
 
 3. Low-pass filter
-LPF performs a non-linear amplification and full-wave rectification. We set the window size with which we slide through our graph and square and sum the points inside the current window. With squaring, we amplify the QRS wave, and also we suppress the noise (because 0.1^2 = 0.01). Squaring also takes care of losing the negative values.
+LPF performs a non-linear amplification and full-wave rectification. We set the window size with which we slide through our graph and square and sum the points inside the current window. With squaring, we amplify the QRS wave, and also we suppress the noise. Squaring also takes care of losing the negative values.
 
 4. Decision making
-We find the first peak in the graph. With this one, we compute the first threshold with the equation: threshold = alfa * gamma * peak + (1 - alpha) * threshold. Then we iterate through all the points and seek for the peaks (if peak > threshold). When finding them, we save them and update the threshold.
+We find the first peak in the graph. We set the first threshold with the first peak. Then we iterate through all the points with the step of window size and seek for the peaks (if peak > threshold). When finding them, we save them and update the threshold (threshold = alfa * gamma * peak + (1 - alpha) * threshold).
 
 5. Outputing the .det file with QRS detections.
+
+
+-----------PARAMETERS----------
+M: 5  (filter length)
+sliding window size (LPF): 10
+alpha: 0.05
+gamma: 0.15
+window size (decision making): 180
+
+-----------RESULTS-------------         
+
+Results are in the file results.txt.
+
+Definitions:
 Sensitivity = TP / (TP + FN)  ...The proportion of events which were detected.
 Positive predictivity = TP / (TP + FP) ...The proportion of detections which actually were events.
 
 
------------PARAMETERS----------
-M: 5
-windowSize (LPF): 10
-alpha: 0.05
-gamma: 0.15
-windowSize (decision making): 180
-
------------RESULTS-------------         POSODOBI!!!!!!
-
---------- time ------ Sensitivity -------- +P ---
-100      37.812           100%            100%
-101      38.750           100%            98.96%
-102      38.532           99.95%          87.54%
-103      39.282           100%            99.94%
-104      38.343           98.82%          96.07%
-105      38.500           99.3%           82.85%
-106      39.406           99.47%          96.62%
-107      39.703           99.89%          90.09%
-108      39.703           88.78%          37.3%
-109      38.563           99.57%          96.4%
-
 -----------CONCLUSION------------
 
-The algorithm despite its simplicity brings very good results. Results also depend on the parameters' values.
+The algorithm despite its simplicity and low time complexity brings very good results. The sensitivity is always more than 90%. Results also depend on the parameters' values. The best combination of parameters depends on the database itself. We could enhance the results even more with the deep analysis of best parameter combination for the specific database.
 
 
-------------------------------------------------------------------
-HOW TO:
-1. Convert .dat to .mat: wfdb2mat -r 100
+-------------HOW TO--------------
 
-2. Convert .det to .qrs: wrann -r 100 -a qrs < 100.det
 
-3. Compare the results with referential results: bxb -r 100 -a atr qrs
+1. Download database: wget -r -np http://www.physionet.org/physiobank/database/mitdb/
 
-Database source: 
-* https://physionet.org/physiobank/database/ltstdb/
-* https://www.physionet.org/physiobank/database/mitdb/
+2. Install database packages:
+apt-get install gcc libcurl4-openssl-dev libexpat1-dev
+wget https://www.physionet.org/physiotools/wfdb.tar.gz
+tar xvfz wfdb.tar.gz
+cd wfdb-10.5.24 
+./configure
+sudo make install
+sudo make check
+
+3. Convert .dat to .mat: wfdb2mat -r 100
+
+4. Convert .det to .qrs: wrann -r 100 -a qrs < 100.det
+
+5. Compare the results with referential results: bxb -r 100 -a atr qrs
+
+
+-------------DATABASE-----------------
+https://www.physionet.org/physiobank/database/mitdb/
+FS = 360Hz
+
+----------------SCRIPTS--------------
+
+-> ./convertToMat.sh   //Converts to .mat files.
+->  octave ./multipleCall.m //Calls QRS Detector on all the files in the folder.
+-> ./convertToQrs.sh  //Convert .det do .qrs using wrann
+-> ./evaluateTheResults.sh //Results evaluating using bxb program.

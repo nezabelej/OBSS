@@ -1,4 +1,4 @@
-function indices = QRSDetect(filename, M, WS)
+function indices = QRSDetect(filename, M, WS, WSDecision)
 
   signal = load(filename);
   x = signal.val(1,:);
@@ -25,11 +25,12 @@ function indices = QRSDetect(filename, M, WS)
   yPlot = y(1:(size(y,2)/300));
   plot(yPlot);
 
- %2. Low-pass filter
+  %2. Low-pass filter
   for i = 1 : (size(x,2) - WS - 1)
     y(i) = sum(y(i : i + WS).^2);
   end 
 
+  %To correct the offset that we created in LPF phase.
   y = [zeros(1,(WS+1)/2) y(1:numel(y-3))];
     
   %Plotting after LPS.
@@ -39,16 +40,18 @@ function indices = QRSDetect(filename, M, WS)
   
   %Decision making.
   thresholdCompute = @(alpha, gamma, peak, threshold) alpha * gamma * peak + (1 - alpha) * threshold;
+  %%Defining parameters.
   alpha = 0.05;
   gamma = 0.15;
-  window = 200;
   
-  threshold = max(y(1:window));
+  threshold = max(y(1:WSDecision));
     
-  for i = 1:window:length(y)-window
-     [max_v,max_i] = max(y(i:i+window));
+  %Iterate through the points with the step of window size.
+  for i = 1:WSDecision:length(y)-WSDecision
+     [max_v,max_i] = max(y(i:i+WSDecision));
      if max_v >= threshold
          y(max_i+i) = 1;
+         %Updating the threshold when finding the peak.
          threshold = thresholdCompute(alpha, gamma, max_v, threshold);
      end
   end
