@@ -22,10 +22,9 @@ We find the first peak in the graph. We set the first threshold with the first p
 
 -----------PARAMETERS----------
 M: 5  (filter length)
-sliding window size (LPF): 10
 alpha: 0.05
 gamma: 0.15
-window size (decision making): 180
+
 
 -----------RESULTS-------------         
 
@@ -34,6 +33,14 @@ Results are in the file results.txt.
 Definitions:
 Sensitivity = TP / (TP + FN)  ...The proportion of events which were detected.
 Positive predictivity = TP / (TP + FP) ...The proportion of detections which actually were events.
+
+For window size, we tried a lot of different combinations for window size within low-pass filtering and at decision making stage. 
+Sampling frequency is 360Hz which means that points are sampled every 3ms. 
+(for example; 1 point(sample) ... 3ms; 60 points(samples) ... 180ms)
+We must be careful that our window is not too large, causing two heart beats in one window and therefore only detecting one.
+The window must also not be too small.
+For first window size (LPF) we tried values between 10 and 60, and for window size at decision making we tried values between 60 and 300. We retrieve best results for WS1 = 10 and WS2 = 180.
+Some combinations of results are attached.
 
 
 -----------CONCLUSION------------
